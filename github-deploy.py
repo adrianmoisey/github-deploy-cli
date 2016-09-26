@@ -11,7 +11,7 @@ branch = os.getenv('GITHUB_BRANCH')
 
 environment = os.getenv('GITHUB_DEPLOYMENT_ENVIRONMENT')
 action = os.getenv('GITHUB_DEPLOYMENT_ACTION', 'create')
-deployment = os.getenv('GITHUB_DEPLOYMENT_ID', None)
+deployment_id = os.getenv('GITHUB_DEPLOYMENT_ID', None)
 url = os.getenv('GITHUB_DEPLOYMENT_URL', None)
 
 gh = github3.login(token=token)
@@ -26,6 +26,6 @@ if action == 'create':
         deployment.create_status('pending', target_url=url)
     print(deployment.id)
 
-if action == 'successful' and deployment is not None:
-    deployment = repo.deployment(deployment)
+if action == 'successful' and deployment_id is not None:
+    deployment = repo.deployment(deployment_id)
     deployment.create_status('success')
