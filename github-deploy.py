@@ -17,15 +17,25 @@ url = os.getenv('GITHUB_DEPLOYMENT_URL', None)
 gh = github3.login(token=token)
 repo = gh.repository(user, repo)
 
-if action == 'create':
+
+def create_deployment(branch, environment, url=False, auto_merge=True):
     deployment = repo.create_deployment(
         branch,
-        auto_merge=True,
+        auto_merge=auto_merge,
         environment=environment)
     if url:
         deployment.create_status('pending', target_url=url)
-    print(deployment.id)
+    return(deployment.id)
 
-if action == 'successful' and deployment_id is not None:
+
+def update_deployment(action, deploymet_id):
     deployment = repo.deployment(deployment_id)
-    deployment.create_status('success')
+    deployment.create_status(action)
+
+
+if __name__ == '__main__':
+    if action == 'create':
+        print(create_deployment(branch, environment, url))
+    if action == 'success' and deployment_id is not None:
+        print "hi"
+        update_deployment(action, deployment_id)
