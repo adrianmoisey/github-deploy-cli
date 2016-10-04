@@ -37,5 +37,4 @@ if __name__ == '__main__':
     if action == 'create':
         print(create_deployment(branch, environment, url))
     if action == 'success' and deployment_id is not None:
-        print "hi"
         update_deployment(action, deployment_id)
