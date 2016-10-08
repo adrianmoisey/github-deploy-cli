@@ -14,6 +14,8 @@ action = os.getenv('GITHUB_DEPLOYMENT_ACTION', 'create')
 deployment_id = os.getenv('GITHUB_DEPLOYMENT_ID', None)
 url = os.getenv('GITHUB_DEPLOYMENT_URL', None)
 
+allowed_actions = ['pending', 'success', 'error', 'failure']
+
 def repo(token, user, repo_name):
     gh = github3.login(token=token)
     return gh.repository(user, repo_name)
@@ -35,7 +37,7 @@ def update_deployment(repo, action, deploymet_id, url):
 
 if __name__ == '__main__':
     repo = repo(token, user, repo_name)
-    if action == 'create':
+    if action == 'create' and deployment_id is None:
         print(create_deployment(repo, branch, environment, url))
-    if action == 'success' and deployment_id is not None:
+    if action in allowed_actions and deployment_id is not None:
         update_deployment(repo, action, deployment_id, url)
