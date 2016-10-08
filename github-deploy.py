@@ -28,9 +28,9 @@ def create_deployment(repo, branch, environment, url=False, auto_merge=True):
     return(deployment.id)
 
 
-def update_deployment(repo, action, deploymet_id):
+def update_deployment(repo, action, deploymet_id, url):
     deployment = repo.deployment(deployment_id)
-    deployment.create_status(action)
+    deployment.create_status(action, target_url=url)
 
 
 if __name__ == '__main__':
@@ -38,4 +38,4 @@ if __name__ == '__main__':
     if action == 'create':
         print(create_deployment(repo, branch, environment, url))
     if action == 'success' and deployment_id is not None:
-        update_deployment(repo, action, deployment_id)
+        update_deployment(repo, action, deployment_id, url)
