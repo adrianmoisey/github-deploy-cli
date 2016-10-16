@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import github3
 
 # required
@@ -21,10 +22,15 @@ def repo(token, user, repo_name):
     return gh.repository(user, repo_name)
 
 def create_deployment(repo, branch, environment, url=False, auto_merge=True):
-    deployment = repo.create_deployment(
-        branch,
-        auto_merge=auto_merge,
-        environment=environment)
+    try:
+        deployment = repo.create_deployment(
+            branch,
+            force=True,
+            auto_merge=auto_merge,
+            environment=environment)
+    except github3.exceptions.ClientError as err:
+        print(err)
+        sys.exit(1)
     if url:
         deployment.create_status('pending', target_url=url)
     return(deployment.id)
